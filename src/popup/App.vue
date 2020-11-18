@@ -1,10 +1,33 @@
 <template>
   <div>
-    <div>current index: {{ currentIndex }}</div>
-    <div @click="exp">export</div>
-    <div @click="del">delete</div>
-    <div v-if="!enabled" @click="enable">enable</div>
-    <div v-else @click="disable">disable</div>
+    <sui-grid :columns="2">
+      <sui-grid-row>
+        <sui-grid-column>
+          <div>
+            <tempalte v-if="enabled">Is recording</tempalte><template v-else>Is <b>not</b> recording</template>
+          </div>
+        </sui-grid-column>
+        <sui-grid-column>
+          <div>current index: {{ currentIndex }}</div>
+        </sui-grid-column>
+      </sui-grid-row>
+
+      <sui-grid-row>
+        <sui-grid-column>
+          <sui-button v-if="!enabled" @click="enable" color="green">enable</sui-button>
+          <sui-button v-else @click="disable" color="red">disable</sui-button>
+        </sui-grid-column>
+      </sui-grid-row>
+
+      <sui-grid-row>
+        <sui-grid-column>
+          <sui-button @click="exp" :loading="isExporting" color="green" basic>export</sui-button>
+        </sui-grid-column>
+        <sui-grid-column>
+          <sui-button @click="del" :loading="isDeleting" color="red" basic :disabled="enabled">delete</sui-button>
+        </sui-grid-column>
+      </sui-grid-row>
+    </sui-grid>
   </div>
 </template>
 
@@ -16,19 +39,30 @@ export default {
   data() {
     return {
       currentIndex: null,
-      enabled: false
+      enabled: false,
+      isExporting: false,
+      isDeleting: false
     }
   },
   methods: {
     enable() {
       window.localStorage.setItem('ENABLED', true)
       this.enabled = true
+      chrome.runtime.sendMessage({
+        action: 'updateIcon',
+        value: true
+      })
     },
     disable() {
       window.localStorage.setItem('ENABLED', false)
       this.enabled = false
+      chrome.runtime.sendMessage({
+        action: 'updateIcon',
+        value: false
+      })
     },
     exp() {
+      this.isExporting = true
       const cols = [
         'index',
         'className',
@@ -63,14 +97,22 @@ export default {
 
           window.open(window.URL.createObjectURL(data))
         })
+        .finally(() => {
+          this.isExporting = false
+        })
     },
     del() {
+      this.isDeleting = true
       db.events
         .where('index')
         .above(0)
         .delete()
         .then(() => {
           window.localStorage.setItem('CURRENT_INDEX', 0)
+          this.currentIndex = 0
+        })
+        .finally(() => {
+          this.isDeleting = false
         })
     }
   },

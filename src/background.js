@@ -31,3 +31,15 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     })
   }
 })
+
+chrome.runtime.onMessage.addListener(function(request) {
+  if (request.action === 'updateIcon') {
+    if (request.value) {
+      chrome.browserAction.setIcon({ path: '/assets/stop.png' })
+    } else {
+      chrome.browserAction.setIcon({ path: '/assets/start.png' })
+    }
+  }
+})
+
+chrome.browserAction.setIcon({ path: '/assets/start.png' })
