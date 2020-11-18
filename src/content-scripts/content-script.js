@@ -20,6 +20,7 @@ const scrollkHandler = event => {
     y: event.y,
     x: event.x,
     id: event.target.id,
+    scrollY: window.scrollY,
     path: event.path
       .map(element => element.tagName)
       .filter(Boolean)

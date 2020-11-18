@@ -80,6 +80,7 @@ export default {
         'key',
         'altKey',
         'shiftKey',
+        'scrollY',
         'text'
       ]
       db.events
