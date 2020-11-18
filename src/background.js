@@ -9,7 +9,7 @@ const getIndex = () => {
 
 browser.runtime.onMessage.addListener(function(request, sender) {
   if (window.localStorage.getItem('ENABLED') === 'true') {
-    if (['CLICK', 'SCROLL', 'MOUSEOVER'].includes(request.type)) {
+    if (['CLICK', 'SCROLL', 'MOUSEOVER', 'KEYPRESS'].includes(request.type)) {
       db.events.add({
         index: getIndex(),
         tabId: sender.tab.id,

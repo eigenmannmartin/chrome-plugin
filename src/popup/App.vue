@@ -33,6 +33,7 @@
 
 <script>
 import db from '../db.js'
+import { saveAs } from 'file-saver'
 
 export default {
   name: 'App',
@@ -76,6 +77,9 @@ export default {
         'url',
         'title',
         'status',
+        'key',
+        'altKey',
+        'shiftKey',
         'text'
       ]
       db.events
@@ -94,8 +98,9 @@ export default {
             )
             .join('\n')
           const data = new Blob([cols.join(';') + '\n', dataString], { type: 'text/csv' })
+          saveAs(data, 'export.csv')
 
-          window.open(window.URL.createObjectURL(data))
+          //window.open(window.URL.createObjectURL(data))
         })
         .finally(() => {
           this.isExporting = false

@@ -42,6 +42,23 @@ const mouseOverHandler = event => {
     className: event.target.className
   })
 }
+
+const keypressHandler = event => {
+  browser.runtime.sendMessage({
+    type: 'KEYPRESS',
+    tag: event.target.tagName,
+    text: event.target.innerText.slice(0, 50).replace(/(\W)/g, ''),
+    id: event.target.id,
+    path: event.path
+      .map(element => element.tagName)
+      .filter(Boolean)
+      .join('<'),
+    key: event.key,
+    altKey: event.altKey,
+    shiftKey: event.shiftKey
+  })
+}
 document.addEventListener('click', clickHandler, true)
 document.addEventListener('scroll', scrollkHandler, true)
 document.addEventListener('mouseover', mouseOverHandler, true)
+document.addEventListener('keypress', keypressHandler, true)

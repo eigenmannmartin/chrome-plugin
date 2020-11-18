@@ -1,5 +1,5 @@
 {
-  "name": "chrome-plugin",
+  "name": "promise-chrome-browser-collector",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "dexie": "^3.0.2",
+    "file-saver": "^2.0.2",
     "level-js": "^5.0.2",
     "levelup": "^4.4.0",
     "minimongo": "^6.7.0",
