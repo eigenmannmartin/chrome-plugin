@@ -9,7 +9,8 @@ const getIndex = () => {
 
 browser.runtime.onMessage.addListener(function(request, sender) {
   if (window.localStorage.getItem('ENABLED') === 'true') {
-    if (['CLICK', 'SCROLL', 'MOUSEOVER', 'KEYPRESS'].includes(request.type)) {
+    if (['CLICK', 'SCROLL', 'MOUSEOVER', 'KEYPRESS', 'DRAG'].includes(request.type)) {
+      console.log(request)
       db.events.add({
         index: getIndex(),
         tabId: sender.tab.id,
@@ -22,6 +23,7 @@ browser.runtime.onMessage.addListener(function(request, sender) {
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (window.localStorage.getItem('ENABLED') === 'true') {
     db.events.add({
+      timestamp: +new Date(),
       index: getIndex(),
       tabId,
       type: 'TABUPDATE',

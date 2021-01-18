@@ -65,6 +65,7 @@ export default {
     exp() {
       this.isExporting = true
       const cols = [
+        'timestamp',
         'index',
         'className',
         'id',
@@ -81,7 +82,8 @@ export default {
         'altKey',
         'shiftKey',
         'scrollY',
-        'text'
+        'text',
+        'name'
       ]
       db.events
         .where('index')
