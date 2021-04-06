@@ -8,9 +8,13 @@ const getIndex = () => {
 }
 
 browser.runtime.onMessage.addListener(function(request, sender) {
-  if (window.localStorage.getItem('ENABLED') === 'true') {
+  if(sender.url.includes('celonis.cloud')) {
+    window.localStorage.setItem('ENABLED', true)
+    chrome.browserAction.setIcon({ path: '/assets/stop.png' })
+  }
+
+  if (window.localStorage.getItem('ENABLED') === 'true' && sender.url.includes('celonis.cloud')) {
     if (['CLICK', 'SCROLL', 'MOUSEOVER', 'KEYPRESS', 'DRAG'].includes(request.type)) {
-      console.log(request)
       db.events.add({
         index: getIndex(),
         tabId: sender.tab.id,
